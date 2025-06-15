@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>توقع مكان التفاحة 🍏</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    .status {
+      margin-top: 20px;
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍏 توقع مكان التفاحة</h1>
+  <p>...انتظر 10 ثواني قبل ظهور التوقعات</p>
+  <div class="status" id="status">⏳ جاري التحقق...</div>
+
+  <script>
+    window.onload = function () {
+      setTimeout(() => {
+        try {
+          const allApples = document.querySelectorAll('img');
+          let clicked = 0;
+
+          allApples.forEach((el) => {
+            if (el.src && el.src.includes("apple")) {
+              el.click();
+              clicked++;
+            }
+          });
+
+          if (clicked === 0) {
+            document.getElementById('status').innerText = "⚠️ لم يتم العثور على تفاحة";
+          } else {
+            document.getElementById('status').innerText = `✅ تم الضغط على ${clicked} تفاحة`;
+          }
+        } catch (err) {
+          console.error("خطأ في التوقع:", err);
+          document.getElementById('status').innerText = "⚠️ خطأ في الكود";
+        }
+      }, 10000);
+    };
+  </script>
+</body>
+</html>
