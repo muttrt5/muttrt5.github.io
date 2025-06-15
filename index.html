@@ -42,3 +42,29 @@
   </script>
 </body>
 </html>
+<script>
+  window.onload = function () {
+    setTimeout(() => {
+  try {
+    // جلب كل الأزرار أو العناصر (غالبًا صور التفاح أو الفطر)
+    const allApples = document.querySelectorAll('img, button, div');
+
+    let clicked = 0;
+
+    allApples.forEach((el) => {
+      // تأكد إن العنصر يمثل تفاحة وليس مجرد ديكور
+      if (el.src && el.src.includes("mushroom")) {
+        el.click();
+        clicked++;
+      }
+    });
+
+    if (clicked === 0) {
+      document.body.innerHTML += "<p style='color: yellow; text-align:center;'>⚠️ لم يتم العثور على تفاحات!</p>";
+    }
+
+  } catch (err) {
+    console.error("خطأ في التوقع:", err);
+    document.body.innerHTML += "<p style='color: red; text-align:center;'>⚠️ خطأ في تنفيذ الكود</p>";
+  }
+}, 10000); // 10 ثوانيsetTimeout(() => {
