@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Crash + Notification بيانات</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 30px;
+    }
+    .box {
+      border: 1px solid #0f0;
+      margin: 10px auto;
+      padding: 10px;
+      width: 90%;
+    }
+    .error {
+      color: #f00;
+    }
+    .none {
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>📡 بيانات Live Crash + Notification</h2>
+  <div class="box" id="statusCrash">Crash ⏳ جاري الاتصال ...</div>
+  <div class="box" id="dataCrash">لا توجد بيانات بعد.</div>
+
+  <div class="box" id="statusNotif">Notification ⏳ جاري الاتصال ...</div>
+  <div class="box" id="dataNotif">لا توجد بيانات بعد.</div>
+
+  <script>
+    function connectWS(id, url, statusId, dataId) {
+      try {
+        const ws = new WebSocket(url);
+        document.getElementById(statusId).innerHTML = id + " ✅ تم الاتصال";
+
+        ws.onmessage = (event) => {
+          document.getElementById(dataId).innerHTML = "📊 " + event.data;
+        };
+
+        ws.onerror = () => {
+          document.getElementById(statusId).innerHTML = id + " ❌ خطأ في الاتصال";
+          document.getElementById(statusId).className = "box error";
+        };
+
+        ws.onclose = () => {
+          document.getElementById(statusId).innerHTML = id + " 🚫 الاتصال مغلق";
+        };
+      } catch (e) {
+        document.getElementById(statusId).innerHTML = id + " ❌ فشل";
+      }
+    }
+
+    // Replace with live tokens
+    connectWS("Crash", "wss://k0bygyosi8.com/games-frame/sockets/crash?whence=22&fcountry=66&ref=1&gr=1357&appGuid=games-web-app-unknown&lng=ar_AE&access_token=eyJhbGciOiJFUzI1NiIsImtpZCI6IjEiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiI1MC8xMTg0Njk4MzU3IiwicGlkIjoiMSIsImp0aSI6IjAvMGVlNGM3OThhMGZmNDMyNTIzZDM5NzMyODJmZjJiOTA2NjAxZWI2MzRiMDBjYjE3YWUzMDI5YzE0NTA1OTA0NiIsImFwcCI6IjczNzE2MGUwNmQ0ODE2NmFfMiIsInhwaiI6IjAiLCJ4Z3IiOiIxMzU3IiwibmJmIjoxNzUwMDM1MDc3LCJleHAiOjE3NTAwMzYyNzcsImlhdCI6MTc1MDAzNTA3N30.x5UHYFMQs088HXZYtza2R5-LELbbESaGkF30kOEj95SaS8uCemjRwS4efMnAfEIkcPjIm3RAoAAPWgFFXqjQ9w", "statusCrash", "dataCrash");
+
+    connectWS("Notification", "wss://k0bygyosi8.com/games-frame/sockets/notification-service?access_token=eyJhbGciOiJFUzI1NiIsImtpZCI6IjEiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiI1MC8xMTg0Njk4MzU3IiwicGlkIjoiMSIsImp0aSI6IjAvMGVlNGM3OThhMGZmNDMyNTIzZDM5NzMyODJmZjJiOTA2NjAxZWI2MzRiMDBjYjE3YWUzMDI5YzE0NTA1OTA0NiIsImFwcCI6IjczNzE2MGUwNmQ0ODE2NmFfMiIsInhwaiI6IjAiLCJ4Z3IiOiIxMzU3IiwibmJmIjoxNzUwMDM1MDc3LCJleHAiOjE3NTAwMzYyNzcsImlhdCI6MTc1MDAzNTA3N30.x5UHYFMQs088HXZYtza2R5-LELbbESaGkF30kOEj95SaS8uCemjRwS4efMnAfEIkcPjIm3RAoAAPWgFFXqjQ9w", "statusNotif", "dataNotif");
+  </script>
+</body>
+</html>
