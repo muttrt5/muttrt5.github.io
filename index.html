@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>بيانات Live Crash 📡</title>
+  <style>
+    body { background-color: #121212; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
+    .status { font-size: 18px; margin: 10px 0; }
+    .data-box { border: 1px solid #0f0; padding: 10px; margin-top: 20px; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>📡 بيانات Live Crash</h1>
+  <div class="status" id="status">جارٍ الاتصال بالسيرفر...</div>
+  <div class="data-box" id="data">لا توجد بيانات بعد 🧩</div>
+
+  <script>
+    const statusElem = document.getElementById("status");
+    const dataElem = document.getElementById("data");
+    
+    const ws = new WebSocket("wss://k0bygyosi8.com/games-frame/sockets/crash?whence=22&fcountry=66&ref=1&gr=1357&appGuid=games-web-app-unknown&lng=ar_AE&access_token=eyJhbGciOiJFUzI1NiIsImtpZCI6IjEiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiI1MC8xMTg0Njk4MzU3IiwicGlkIjoiMSIsImp0aSI6IjAvMGVlNGM3OThhMGZmNDMyNTIzZDM5NzMyODJmZjJiOTA2NjAxZWI2MzRiMDBjYjE3YWUzMDI5YzE0NTA1OTA0NiIsImFwcCI6IjczNzE2MGUwNmQ0ODE2NmFfMiIsInhwaiI6IjAiLCJ4Z3IiOiIxMzU3IiwibmJmIjoxNzUwMDM1MDc3LCJleHAiOjE3NTAwMzYyNzcsImlhdCI6MTc1MDAzNTA3N30.x5UHYFMQs088HXZYtza2R5-LELbbESaGkF30kOEj95SaS8uCemjRwS4efMnAfEIkcPjIm3RAoAAPWgFFXqjQ9w");
+
+    ws.onopen = () => {
+      statusElem.innerHTML = "✅ تم الاتصال بالسيرفر بنجاح";
+    };
+
+    ws.onmessage = (event) => {
+      dataElem.innerHTML = "<b>📊 بيانات:</b><br>" + event.data;
+    };
+
+    ws.onerror = (error) => {
+      statusElem.innerHTML = "❌ خطأ في الاتصال";
+    };
+
+    ws.onclose = () => {
+      statusElem.innerHTML = "🚫 تم غلق الاتصال";
+    };
+  </script>
+</body>
+</html>
