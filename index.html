@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Crash Data Live 📡</title>
+    <style>
+        body {
+            background-color: #111;
+            color: #0f0;
+            font-family: monospace;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .status {
+            font-weight: bold;
+            color: #0f0;
+        }
+        .error {
+            color: #f00;
+        }
+        .data-box {
+            margin-top: 20px;
+            border: 1px solid #0f0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>📡 بيانات Live Crash</h2>
+    <p class="status" id="status">جاري الاتصال بالسيرفر...</p>
+    <div class="data-box" id="data-box">لا توجد بيانات بعد 🧁</div>
+
+    <script>
+        const status = document.getElementById("status");
+        const dataBox = document.getElementById("data-box");
+
+        const ws = new WebSocket("wss://k0bygyosi8.com/games-frame/sockets/crash?whence=22&fcountry=66&ref=1&gr=1357&appGuid=games-web-app-unknown&lng=ar_AE&access_token=eyJhbGciOiJFUzI1NiIsImtpZCI6IjEiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiI1MC8xMTg0Njk4MzU3IiwicGlkIjoiMSIsImp0aSI6IjAvMGVlNGM3OThhMGZmNDMyNTIzZDM5NzMyODJmZjJiOTA2NjAxZWI2MzRiMDBjYjE3YWUzMDI5YzE0NTA1OTA0NiIsImFwcCI6IjczNzE2MGUwNmQ0ODE2NmFfMiIsInhwaiI6IjAiLCJ4Z3IiOiIxMzU3IiwibmJmIjoxNzUwMDM1MDc3LCJleHAiOjE3NTAwMzYyNzcsImlhdCI6MTc1MDAzNTA3N30.x5UHYFMQs088HXZYtza2R5-LELbbESaGkF30kOEj95SaS8uCemjRwS4efMnAfEIkcPjIm3RAoAAPWgFFXqjQ9w");
+
+        ws.onopen = () => {
+            status.innerHTML = "✅ تم الاتصال بالسيرفر بنجاح";
+            ws.send('{}'); // أو اتركه فارغ إذا لم يُطلب رسالة مبدئية
+        };
+
+        ws.onmessage = (event) => {
+            dataBox.innerHTML = event.data;
+        };
+
+        ws.onerror = (event) => {
+            status.innerHTML = "❌ حدث خطأ أثناء الاتصال";
+            status.classList.add("error");
+        };
+
+        ws.onclose = () => {
+            status.innerHTML = "🚫 الاتصال مغلق";
+            status.classList.add("error");
+        };
+    </script>
+</body>
+</html>
