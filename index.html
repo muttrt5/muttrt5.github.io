@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EUR/USD Trading Signal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .price {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+    .signal {
+      font-size: 1.5em;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    .buy {
+      background: #10b981;
+    }
+    .sell {
+      background: #ef4444;
+    }
+    .wait {
+      background: #f59e0b;
+    }
+  </style>
+</head>
+<body>
+  <h1>تحليل لحظي EUR/USD</h1>
+  <div class="price" id="price">السعر: ...</div>
+  <div class="signal wait" id="signal">جاري التحليل...</div>  <script>
+    let price = 1.0750;
+
+    function generateSignal(p) {
+      if (p > 1.0780) return { text: "بيع الآن", class: "sell" };
+      if (p < 1.0720) return { text: "شراء الآن", class: "buy" };
+      return { text: "انتظار", class: "wait" };
+    }
+
+    function update() {
+      // محاكاة حركة السعر
+      let change = (Math.random() - 0.5) * 0.002;
+      price = +(price + change).toFixed(5);
+      document.getElementById("price").textContent = `السعر: ${price}`;
+
+      const signal = generateSignal(price);
+      const el = document.getElementById("signal");
+      el.textContent = signal.text;
+      el.className = `signal ${signal.class}`;
+    }
+
+    setInterval(update, 1500);
+  </script></body>
+</html>
