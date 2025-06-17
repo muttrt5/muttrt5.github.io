@@ -2,61 +2,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EUR/USD Trading Signal</title>
+  <title>Auto Trading Assistant</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
+      margin: 0;
+      background: #0d1117;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #f0f6fc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 400px;
       text-align: center;
-      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
     }
-    .price {
-      font-size: 2em;
-      margin: 10px 0;
+    h1 {
+      font-size: 24px;
+      color: #58a6ff;
     }
-    .signal {
-      font-size: 1.5em;
+    #status {
+      font-size: 20px;
+      margin-top: 20px;
       font-weight: bold;
-      padding: 10px;
-      border-radius: 8px;
-      display: inline-block;
     }
-    .buy {
-      background: #10b981;
-    }
-    .sell {
-      background: #ef4444;
-    }
-    .wait {
-      background: #f59e0b;
+    #timer {
+      font-size: 18px;
+      margin-top: 10px;
+      color: #8b949e;
     }
   </style>
 </head>
 <body>
-  <h1>تحليل لحظي EUR/USD</h1>
-  <div class="price" id="price">السعر: ...</div>
-  <div class="signal wait" id="signal">جاري التحليل...</div>  <script>
-    let price = 1.0750;
+  <div class="container">
+    <h1>🔁 EUR/USD Trading Signal</h1>
+    <div id="status">تحليل جاري...</div>
+    <div id="timer">صفقة جديدة خلال: <span id="countdown">30</span> ثانية</div>
+  </div>  <script>
+    let countdown = 30;
+    let lastPrice = 1.1000 + Math.random() / 100;
 
-    function generateSignal(p) {
-      if (p > 1.0780) return { text: "بيع الآن", class: "sell" };
-      if (p < 1.0720) return { text: "شراء الآن", class: "buy" };
-      return { text: "انتظار", class: "wait" };
+    function simulatePrice() {
+      const variation = (Math.random() - 0.5) / 1000;
+      return +(lastPrice + variation).toFixed(4);
     }
 
-    function update() {
-      // محاكاة حركة السعر
-      let change = (Math.random() - 0.5) * 0.002;
-      price = +(price + change).toFixed(5);
-      document.getElementById("price").textContent = `السعر: ${price}`;
-
-      const signal = generateSignal(price);
-      const el = document.getElementById("signal");
-      el.textContent = signal.text;
-      el.className = `signal ${signal.class}`;
+    function updateSignal() {
+      const newPrice = simulatePrice();
+      const direction = newPrice > lastPrice ? 'شراء 🟢' : 'بيع 🔴';
+      document.getElementById("status").innerText = `إشارة: ${direction}`;
+      lastPrice = newPrice;
     }
 
-    setInterval(update, 1500);
+    setInterval(() => {
+      countdown--;
+      document.getElementById("countdown").innerText = countdown;
+      if (countdown === 0) {
+        updateSignal();
+        countdown = 30;
+      }
+    }, 1000);
   </script></body>
 </html>
