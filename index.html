@@ -57,4 +57,7 @@
       // حساب المتوسط
       const last10 = crashHistory.slice(-10);
       const avg = last10.reduce((sum, item) => sum + item.multiplier, 0) / last10.length;
-      document.getElementById("average").textContent = `📊 متوسط آخر 10 جولات: x${avg
+      document.getElementById("average").textContent = `📊 متوسط آخر 10 جولات: x${avg.toFixed(2)}`;
+    }
+  </script></body>
+</html>
