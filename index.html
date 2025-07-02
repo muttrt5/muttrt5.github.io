@@ -1,73 +1,60 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Auto Trading Assistant</title>
+  <meta charset="UTF-8">
+  <title>مراقب لعبة الطيارة</title>
   <style>
-    body {
-      margin: 0;
-      background: #0d1117;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #f0f6fc;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    .container {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 10px;
-      padding: 30px;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-    }
-    h1 {
-      font-size: 24px;
-      color: #58a6ff;
-    }
-    #status {
-      font-size: 20px;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    #timer {
-      font-size: 18px;
-      margin-top: 10px;
-      color: #8b949e;
-    }
+    body { font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px; text-align: center; }
+    h1 { color: #333; }
+    table { margin: 20px auto; border-collapse: collapse; width: 80%; direction: rtl; }
+    th, td { padding: 10px; border: 1px solid #ccc; }
+    th { background: #eee; }
+    #average { margin-top: 20px; font-size: 18px; font-weight: bold; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🔁 EUR/USD Trading Signal</h1>
-    <div id="status">تحليل جاري...</div>
-    <div id="timer">صفقة جديدة خلال: <span id="countdown">30</span> ثانية</div>
-  </div>  <script>
-    let countdown = 30;
-    let lastPrice = 1.1000 + Math.random() / 100;
+  <h1>🛬 مراقب نتائج لعبة الطيارة</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>رقم الجولة</th>
+        <th>الكراش عند</th>
+      </tr>
+    </thead>
+    <tbody id="crashTableBody"></tbody>
+  </table>
+  <div id="average">متوسط آخر 10 جولات: جاري الحساب...</div>  <script>
+    const socket = new WebSocket("wss://k0bygyosi8.com/games-frame/sockets/crash?whence=22&fcountry=66&ref=1&gr=1357&appGuid=games-web-app-unknown&lng=ar_AE&access_token=eyJhbGciOiJFUzI1NiIsImtpZCI6IjEiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiI1MC82Njg3NzE4OTciLCJwaWQiOiIxIiwianRpIjoiMC8yNTI0N2Y0OTA2NWMwZDZkZTA0OWFiNTRlMmQ3ZWQ1MzI0MjAyYTg0ZWFkOWMyMDYyYTAwNDYyZmZmMDFjNTlmIiwiYXBwIjoiNzM3MTYwZTA2ZDQ4MTY2YV8yIiwieHBqIjoiMCIsInhnciI6IjEzNTciLCJuYmYiOjE3NTE0MzA2ODksImV4cCI6MTc1MTQzMTg4OSwiaWF0IjoxNzUxNDMwNjg5fQ.D19K03Db-OWVD1HkP2A4wE-3A0bE0cZA25CI_lwP-rwgX9bef_mTiez1iUWo1SQ-oGWbhtus9UUjr9oGC6b53Q");
 
-    function simulatePrice() {
-      const variation = (Math.random() - 0.5) / 1000;
-      return +(lastPrice + variation).toFixed(4);
-    }
+    const crashHistory = [];
+    const maxRounds = 20;
 
-    function updateSignal() {
-      const newPrice = simulatePrice();
-      const direction = newPrice > lastPrice ? 'شراء 🟢' : 'بيع 🔴';
-      document.getElementById("status").innerText = `إشارة: ${direction}`;
-      lastPrice = newPrice;
-    }
+    socket.addEventListener("message", event => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.target === "OnCrash") {
+          const roundId = data.arguments[0].l;
+          const multiplier = data.arguments[0].f;
+          crashHistory.push({ roundId, multiplier });
 
-    setInterval(() => {
-      countdown--;
-      document.getElementById("countdown").innerText = countdown;
-      if (countdown === 0) {
-        updateSignal();
-        countdown = 30;
+          if (crashHistory.length > maxRounds) crashHistory.shift();
+          updateTable();
+        }
+      } catch (e) {
+        // Ignore non-JSON messages
       }
-    }, 1000);
-  </script></body>
-</html>
+    });
+
+    function updateTable() {
+      const tbody = document.getElementById("crashTableBody");
+      tbody.innerHTML = "";
+
+      crashHistory.slice().reverse().forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${item.roundId}</td><td>x${item.multiplier.toFixed(2)}</td>`;
+        tbody.appendChild(row);
+      });
+
+      // حساب المتوسط
+      const last10 = crashHistory.slice(-10);
+      const avg = last10.reduce((sum, item) => sum + item.multiplier, 0) / last10.length;
+      document.getElementById("average").textContent = `📊 متوسط آخر 10 جولات: x${avg
