@@ -150,11 +150,22 @@
       totalEl.innerText = "$" + total.toFixed(2);
     }
 
-    function removeItem(index){
-      cart.splice(index,1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
+    function increaseQty(index){
+  cart[index].qty += 1;
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+function decreaseQty(index){
+  if(cart[index].qty > 1){
+    cart[index].qty -= 1;
+  } else {
+    cart.splice(index, 1);
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
 
     renderCart();
   </script>
