@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Cart | PetAura™</title>
+  <title>Cart | PetAura™</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,23 +13,6 @@
       font-family:'Poppins',sans-serif;
       background:#F6F3EE;
     }
-
-    .card{
-      transition:0.3s;
-    }
-
-    .card:hover{
-      transform:translateY(-5px);
-      box-shadow:0 15px 40px rgba(0,0,0,0.08);
-    }
-
-    .btn{
-      transition:0.3s;
-    }
-
-    .btn:hover{
-      transform:scale(1.03);
-    }
   </style>
 </head>
 
@@ -38,13 +21,10 @@
   <!-- HEADER -->
   <header class="bg-white border-b border-[#e9dfd2]">
     <div class="max-w-6xl mx-auto px-6 py-6 flex justify-between items-center">
-
       <h1 class="text-2xl font-bold">🛒 Your Cart</h1>
-
       <a href="index.html" class="text-sm text-gray-500 hover:text-black">
         ← Continue Shopping
       </a>
-
     </div>
   </header>
 
@@ -52,7 +32,7 @@
   <main class="max-w-6xl mx-auto px-6 py-14 grid lg:grid-cols-3 gap-10">
 
     <!-- ITEMS -->
-    <section class="lg:col-span-2 space-y-6">
+    <section class="lg:col-span-2 space-y-5">
 
       <div id="cart-items" class="space-y-5"></div>
 
@@ -63,7 +43,7 @@
     </section>
 
     <!-- SUMMARY -->
-    <aside class="bg-white p-8 rounded-3xl border border-[#e9dfd2] h-fit card">
+    <aside class="bg-white p-8 rounded-3xl border h-fit">
 
       <h2 class="text-2xl font-bold mb-6">Order Summary</h2>
 
@@ -82,7 +62,7 @@
         <span id="total">$0.00</span>
       </div>
 
-      <button class="w-full mt-6 bg-black text-white py-3 rounded-full btn">
+      <button class="w-full mt-6 bg-black text-white py-3 rounded-full">
         Checkout
       </button>
 
@@ -90,7 +70,9 @@
 
   </main>
 
+  <!-- SCRIPT -->
   <script>
+
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const container = document.getElementById("cart-items");
@@ -99,75 +81,95 @@
     const totalEl = document.getElementById("total");
 
     function renderCart() {
-      container.innerHTML += `
-  <div class="bg-white p-6 rounded-3xl border flex justify-between items-center">
+      container.innerHTML = "";
 
-    <div>
-      <h3 class="text-lg font-semibold">${item.name}</h3>
+      let total = 0;
 
-      <p class="text-gray-500">
-        $${item.price.toFixed(2)}
-      </p>
+      if(cart.length === 0){
+        empty.classList.remove("hidden");
+      } else {
+        empty.classList.add("hidden");
+      }
 
-      <!-- QUANTITY CONTROLS -->
-      <div class="flex items-center gap-3 mt-3">
+      cart.forEach((item, index) => {
 
-        <button onclick="decreaseQty(${index})"
-          class="w-8 h-8 bg-gray-200 rounded-full">
-          -
-        </button>
+        if(!item.qty){
+          item.qty = 1;
+        }
 
-        <span class="font-semibold">${item.qty}</span>
+        total += item.price * item.qty;
 
-        <button onclick="increaseQty(${index})"
-          class="w-8 h-8 bg-gray-200 rounded-full">
-          +
-        </button>
+        container.innerHTML += `
+          <div class="bg-white p-6 rounded-3xl border flex justify-between items-center">
 
-      </div>
-    </div>
+            <div>
+              <h3 class="text-lg font-semibold">${item.name}</h3>
+              <p class="text-gray-500">$${item.price.toFixed(2)}</p>
 
-    <div class="text-right">
+              <!-- QUANTITY -->
+              <div class="flex items-center gap-3 mt-3">
 
-      <span class="font-semibold text-lg">
-        $${(item.price * item.qty).toFixed(2)}
-      </span>
+                <button onclick="decreaseQty(${index})"
+                  class="w-8 h-8 bg-gray-200 rounded-full">
+                  -
+                </button>
 
-      <br>
+                <span class="font-semibold">${item.qty}</span>
 
-      <button onclick="removeItem(${index})"
-        class="text-red-500 text-sm hover:underline mt-3">
-        Remove
-      </button>
+                <button onclick="increaseQty(${index})"
+                  class="w-8 h-8 bg-gray-200 rounded-full">
+                  +
+                </button>
 
-    </div>
+              </div>
+            </div>
 
-  </div>
-`;
+            <div class="text-right">
+
+              <span class="font-semibold text-lg">
+                $${(item.price * item.qty).toFixed(2)}
+              </span>
+
+              <br>
+
+              <button onclick="removeItem(${index})"
+                class="text-red-500 text-sm hover:underline mt-3">
+                Remove
+              </button>
+
+            </div>
+
+          </div>
+        `;
       });
 
       subtotalEl.innerText = "$" + total.toFixed(2);
       totalEl.innerText = "$" + total.toFixed(2);
+
+      localStorage.setItem("cart", JSON.stringify(cart));
     }
 
     function increaseQty(index){
-  cart[index].qty += 1;
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-}
+      cart[index].qty += 1;
+      renderCart();
+    }
 
-function decreaseQty(index){
-  if(cart[index].qty > 1){
-    cart[index].qty -= 1;
-  } else {
-    cart.splice(index, 1);
-  }
+    function decreaseQty(index){
+      if(cart[index].qty > 1){
+        cart[index].qty -= 1;
+      } else {
+        cart.splice(index, 1);
+      }
+      renderCart();
+    }
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-}
+    function removeItem(index){
+      cart.splice(index, 1);
+      renderCart();
+    }
 
     renderCart();
+
   </script>
 
 </body>
