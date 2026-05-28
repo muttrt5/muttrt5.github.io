@@ -1,113 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel | PetAura™</title>
+  <meta charset="UTF-8">
+  <title>Admin Orders - PetAura</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      onSnapshot,
+      updateDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "petaura-efbc9.firebaseapp.com",
+      projectId: "petaura-efbc9",
+      storageBucket: "petaura-efbc9.appspot.com",
+      messagingSenderId: "113061782428",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const container = document.getElementById("orders");
+
+    // 🔥 LIVE ORDERS
+    onSnapshot(collection(db, "orders"), (snapshot) => {
+
+      container.innerHTML = "";
+
+      snapshot.forEach((docSnap) => {
+        const order = docSnap.data();
+
+        container.innerHTML += `
+          <div class="card">
+            <h3>💰 Total: $${order.total}</h3>
+
+            <p><b>Status:</b> ${order.status}</p>
+
+            <pre>${JSON.stringify(order.items, null, 2)}</pre>
+
+            <button onclick="markShipped('${docSnap.id}')">
+              Mark as Shipped
+            </button>
+          </div>
+        `;
+      });
+    });
+
+    // 🔥 Change status
+    window.markShipped = async function(id){
+      await updateDoc(doc(db, "orders", id), {
+        status: "shipped"
+      });
+    }
+
+  </script>
 
   <style>
     body{
-      background:#F6F3EE;
       font-family: Arial;
+      background:#f5f5f5;
+      padding:20px;
+    }
+
+    h1{
+      text-align:center;
+    }
+
+    .card{
+      background:#fff;
+      padding:20px;
+      margin:15px auto;
+      border-radius:15px;
+      max-width:600px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    button{
+      margin-top:10px;
+      padding:10px 15px;
+      border:none;
+      border-radius:10px;
+      background:black;
+      color:white;
+      cursor:pointer;
+    }
+
+    pre{
+      background:#f0f0f0;
+      padding:10px;
+      border-radius:10px;
+      overflow:auto;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="max-w-5xl mx-auto px-6 py-10">
+  <h1>📦 Live Orders Dashboard</h1>
 
-    <h1 class="text-3xl font-bold mb-8">🛠 Admin Panel</h1>
-
-    <!-- FORM -->
-    <div class="bg-white p-6 rounded-2xl border mb-10">
-
-      <input id="name" placeholder="Product Name"
-        class="w-full mb-3 p-3 border rounded"/>
-
-      <input id="price" type="number" placeholder="Price"
-        class="w-full mb-3 p-3 border rounded"/>
-
-      <input id="image" placeholder="Image URL"
-        class="w-full mb-3 p-3 border rounded"/>
-
-      <button onclick="addProduct()"
-        class="bg-black text-white px-6 py-3 rounded-full">
-        Add Product
-      </button>
-
-    </div>
-
-    <!-- PRODUCTS LIST -->
-    <div id="list" class="space-y-4"></div>
-
-  </div>
-
-  <script>
-
-    let products = JSON.parse(localStorage.getItem("products")) || [];
-
-    function render(){
-      let list = document.getElementById("list");
-      list.innerHTML = "";
-
-      products.forEach((p, i) => {
-        list.innerHTML += `
-          <div class="bg-white p-4 rounded-xl border flex justify-between items-center">
-
-            <div class="flex items-center gap-4">
-
-              <img src="${p.image}" class="w-16 h-16 rounded object-cover"/>
-
-              <div>
-                <h3 class="font-bold">${p.name}</h3>
-                <p class="text-gray-500">$${p.price}</p>
-              </div>
-
-            </div>
-
-            <button onclick="deleteProduct(${i})"
-              class="text-red-500">
-              Delete
-            </button>
-
-          </div>
-        `;
-      });
-
-      localStorage.setItem("products", JSON.stringify(products));
-    }
-
-    function addProduct(){
-      let name = document.getElementById("name").value;
-      let price = document.getElementById("price").value;
-      let image = document.getElementById("image").value;
-
-      if(!name || !price) return;
-
-      products.push({
-        name,
-        price: parseFloat(price),
-        image
-      });
-
-      render();
-
-      document.getElementById("name").value = "";
-      document.getElementById("price").value = "";
-      document.getElementById("image").value = "";
-    }
-
-    function deleteProduct(index){
-      products.splice(index,1);
-      render();
-    }
-
-    render();
-
-  </script>
+  <div id="orders"></div>
 
 </body>
 </html>
