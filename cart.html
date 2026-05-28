@@ -104,19 +104,39 @@
 
     <div>
       <h3 class="text-lg font-semibold">${item.name}</h3>
+
       <p class="text-gray-500">
-        $${item.price.toFixed(2)} × ${item.qty}
+        $${item.price.toFixed(2)}
       </p>
+
+      <!-- QUANTITY CONTROLS -->
+      <div class="flex items-center gap-3 mt-3">
+
+        <button onclick="decreaseQty(${index})"
+          class="w-8 h-8 bg-gray-200 rounded-full">
+          -
+        </button>
+
+        <span class="font-semibold">${item.qty}</span>
+
+        <button onclick="increaseQty(${index})"
+          class="w-8 h-8 bg-gray-200 rounded-full">
+          +
+        </button>
+
+      </div>
     </div>
 
-    <div class="flex items-center gap-4">
+    <div class="text-right">
 
-      <span class="font-semibold">
+      <span class="font-semibold text-lg">
         $${(item.price * item.qty).toFixed(2)}
       </span>
 
+      <br>
+
       <button onclick="removeItem(${index})"
-        class="text-red-500 text-sm hover:underline">
+        class="text-red-500 text-sm hover:underline mt-3">
         Remove
       </button>
 
