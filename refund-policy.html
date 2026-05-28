@@ -1,73 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Refund Policy</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Refund Policy | PetAura™</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      color: #333;
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#F6F3EE;
+      color:#1F1F1F;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    h2 {
-      margin-top: 25px;
-      color: #222;
-    }
-
-    p {
-      line-height: 1.7;
-      margin: 10px 0;
-    }
-
-    ul {
-      margin: 10px 0 10px 20px;
+    .glass{
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.7);
     }
   </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Refund Policy</h1>
+  <!-- NAVBAR (same style as main site) -->
+  <header class="sticky top-0 z-50 glass border-b border-[#e9dfd2]">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-    <p>We want you to be completely satisfied with your purchase. If you're not happy, we're here to help.</p>
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-[#D6C2A8] flex items-center justify-center text-white font-bold text-xl">
+          P
+        </div>
 
-    <h2>Returns</h2>
-    <p>You have 14 days to request a return after receiving your item.</p>
-    <p>To be eligible for a return:</p>
-    <ul>
-      <li>The item must be unused and in the same condition that you received it.</li>
-      <li>It must also be in the original packaging.</li>
-    </ul>
+        <div>
+          <h1 class="text-2xl font-bold">PetAura™</h1>
+          <p class="text-xs text-gray-500">Luxury Pet Wellness</p>
+        </div>
+      </div>
 
-    <h2>Refunds</h2>
-    <p>Once we receive your item, we will inspect it and notify you about the status of your refund.</p>
-    <p>If approved, your refund will be processed to your original payment method within a few days.</p>
+      <nav class="hidden md:flex gap-8 text-sm font-medium">
+        <a href="index.html">Home</a>
+        <a href="index.html#products">Products</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
 
-    <h2>Late or Missing Refunds</h2>
-    <p>If you haven’t received a refund yet, please check your bank account again.</p>
-    <p>Then contact your payment provider, it may take some time before your refund is officially posted.</p>
+      <button class="bg-[#1F1F1F] text-white px-5 py-3 rounded-full">
+        Cart (0)
+      </button>
 
-    <h2>Contact Us</h2>
-    <p>If you have any questions about our refund policy, contact us at support@example.com</p>
-  </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <section class="max-w-5xl mx-auto px-6 py-20">
+
+    <div class="text-center mb-14">
+      <h1 class="text-5xl font-bold mb-4">Refund Policy</h1>
+      <p class="text-gray-600">We make returns simple and stress-free for all PetAura customers.</p>
+    </div>
+
+    <div class="space-y-8">
+
+      <div class="bg-white border border-[#e9dfd2] rounded-[30px] p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-3">Returns</h2>
+        <p class="text-gray-600 leading-relaxed">
+          You can request a return within 14 days of receiving your order.
+          Items must be unused, in original condition, and in original packaging.
+        </p>
+      </div>
+
+      <div class="bg-white border border-[#e9dfd2] rounded-[30px] p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-3">Refund Process</h2>
+        <p class="text-gray-600 leading-relaxed">
+          Once your return is received and inspected, we will notify you.
+          Approved refunds are processed to your original payment method within a few business days.
+        </p>
+      </div>
+
+      <div class="bg-white border border-[#e9dfd2] rounded-[30px] p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-3">Late or Missing Refunds</h2>
+        <p class="text-gray-600 leading-relaxed">
+          If you haven’t received your refund yet, check your bank account first,
+          then contact your payment provider as processing time may vary.
+        </p>
+      </div>
+
+      <div class="bg-white border border-[#e9dfd2] rounded-[30px] p-8 shadow-sm">
+        <h2 class="text-2xl font-semibold mb-3">Contact</h2>
+        <p class="text-gray-600 leading-relaxed">
+          For any refund-related questions, contact us at:  
+          <span class="font-semibold">support@petaura.com</span>
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-[#e9dfd2] mt-20">
+    <div class="text-center py-8 text-sm text-gray-500">
+      © 2026 PetAura™. All rights reserved.
+    </div>
+  </footer>
 
 </body>
 </html>
